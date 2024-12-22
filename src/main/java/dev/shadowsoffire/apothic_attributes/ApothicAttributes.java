@@ -104,6 +104,7 @@ public class ApothicAttributes {
                 ALObjects.Attributes.HEALING_RECEIVED,
                 ALObjects.Attributes.ARMOR_PIERCE,
                 ALObjects.Attributes.ARMOR_SHRED,
+                ALObjects.Attributes.PROJECTILE_DAMAGE,
                 ALObjects.Attributes.PROT_PIERCE,
                 ALObjects.Attributes.PROT_SHRED,
                 ALObjects.Attributes.DODGE_CHANCE,

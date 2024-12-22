@@ -66,13 +66,15 @@ public class ALObjects {
         public static final Holder<Attribute> COLD_DAMAGE = R.attribute("cold_damage", () -> new RangedAttribute("apothic_attributes:cold_damage", 0.0D, 0.0D, 1000.0D).setSyncable(true));
 
         /**
-         * Chance that any attack will critically strike. Base value = (0.05) = 5% chance to critically strike.<br>
+         * Chance that any attack will critically strike. Base value = (0.05) = 5% chance to critically strike.
+         * <p>
          * Not related to vanilla (jump) critical strikes.
          */
         public static final Holder<Attribute> CRIT_CHANCE = R.attribute("crit_chance", () -> new PercentageAttribute("apothic_attributes:crit_chance", 0.05D, 0.0D, 10.0D).setSyncable(true));
 
         /**
-         * Amount of damage caused by critical strikes. Base value = (1.5) = 150% normal damage dealt.<br>
+         * Amount of damage caused by critical strikes. Base value = (1.5) = 150% normal damage dealt.
+         * <p>
          * Also impacts vanilla (jump) critical strikes.
          */
         public static final Holder<Attribute> CRIT_DAMAGE = R.attribute("crit_damage", () -> new PercentageAttribute("apothic_attributes:crit_damage", 1.5D, 1.0D, 100.0D).setSyncable(true));
@@ -83,7 +85,7 @@ public class ALObjects {
         public static final Holder<Attribute> CURRENT_HP_DAMAGE = R.attribute("current_hp_damage", () -> new PercentageAttribute("apothic_attributes:current_hp_damage", 0.0D, 0.0D, 1.0D).setSyncable(true));
 
         /**
-         * Chance to dodge incoming melee damage. Base value = (0.0) = 0% chance to dodge.<br>
+         * Chance to dodge incoming melee damage. Base value = (0.0) = 0% chance to dodge.
          * "Melee" damage is considered as damage from another entity within the player's attack range.
          * <p>
          * This includes projectile attacks, as long as the projectile actually impacts the player.
@@ -111,12 +113,12 @@ public class ALObjects {
         public static final Holder<Attribute> GHOST_HEALTH = R.attribute("ghost_health", () -> new RangedAttribute("apothic_attributes:ghost_health", 0.0D, 0.0D, 1000.0D).setSyncable(true));
 
         /**
-         * Adjusts all healing received. Base value = (1.0) = 100% xp gained.
+         * Adjusts all healing received. Base value = (1.0) = 100% incoming healing.
          */
         public static final Holder<Attribute> HEALING_RECEIVED = R.attribute("healing_received", () -> new PercentageAttribute("apothic_attributes:healing_received", 1.0D, 0.0D, 1000.0D).setSyncable(true));
 
         /**
-         * Percent of physical damage converted to health. Base value = (0.0) = 0%
+         * Percent of physical damage dealt converted to health. Base value = (0.0) = 0%
          */
         public static final Holder<Attribute> LIFE_STEAL = R.attribute("life_steal", () -> new PercentageAttribute("apothic_attributes:life_steal", 0.0D, 0.0D, 10.0D).setSyncable(true));
 
