@@ -99,6 +99,9 @@
     "apothic_attributes:armor_shred": "Armor Shred",
     "apothic_attributes:armor_shred.desc": "Percentage reduction to the target's armor value.",
 
+    "apothic_attributes:projectile_damage": "Projectile Damage",
+    "apothic_attributes:projectile_damage.desc": "Damage multiplier for all outgoing projectiles.",
+
     "apothic_attributes:prot_pierce": "Protection Pierce",
     "apothic_attributes:prot_pierce.desc": "Flat reduction to the target's protection point total.",
 

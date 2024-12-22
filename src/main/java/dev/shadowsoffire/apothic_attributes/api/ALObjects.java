@@ -27,6 +27,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.bus.api.IEventBus;
@@ -128,6 +129,13 @@ public class ALObjects {
          * Percent of physical damage converted to absorption hearts. Base value = (0.0) = 0%
          */
         public static final Holder<Attribute> OVERHEAL = R.attribute("overheal", () -> new PercentageAttribute("apothic_attributes:overheal", 0.0D, 0.0D, 10.0D).setSyncable(true));
+
+        /**
+         * Generic Projectile Damage. Base value = (1.0) = 100% default projectile damage.
+         * <p>
+         * Applies to any incoming damage where the direct attacking entity is a {@link Projectile}.
+         */
+        public static final Holder<Attribute> PROJECTILE_DAMAGE = R.attribute("projectile_damage", () -> new PercentageAttribute("apothic_attributes:projectile_damage", 1.0D, 0.0D, 10.0D).setSyncable(true));
 
         /**
          * Flat protection penetration. Base value = (0.0) = 0 protection points bypassed during damage calculations.

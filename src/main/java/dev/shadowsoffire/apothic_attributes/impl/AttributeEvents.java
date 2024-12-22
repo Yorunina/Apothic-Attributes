@@ -266,6 +266,15 @@ public class AttributeEvents {
         }
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void projDmg(LivingIncomingDamageEvent e) {
+        DamageSource src = e.getSource();
+        if (src.getDirectEntity() instanceof Projectile && src.getEntity() instanceof LivingEntity projOwner) {
+            double projDmgMult = projOwner.getAttributeValue(ALObjects.Attributes.PROJECTILE_DAMAGE);
+            e.setAmount(e.getAmount() * (float) projDmgMult);
+        }
+    }
+
     /**
      * Handles {@link ALObjects#DODGE_CHANCE} for melee attacks.
      */
