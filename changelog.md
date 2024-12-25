@@ -1,3 +1,7 @@
+## 2.5.0
+* Added the Projectile Damage attribute, which increases the damage of all projectiles owned by the entity.
+* Updated the isPhysicalDamage check to use `neoforge:is_magic` instead of raw damage type checks.
+
 ## 2.4.0
 * `IFormattableAttribute`, `GatherSkippedAttributeTooltipsEvent`, and `AddAttributeTooltipsEvent` have all been removed.
   * These were added to NeoForge in 21.1.60.
