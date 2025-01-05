@@ -200,7 +200,7 @@ public class AttributesGui implements Renderable, GuiEventListener {
             }
 
             if (ApothicAttributes.getTooltipFlag().isAdvanced()) {
-                Style style = Style.EMPTY.withColor(ChatFormatting.GRAY).withUnderlined(false);
+                Style style = Style.EMPTY.withColor(ChatFormatting.DARK_GRAY).withUnderlined(false);
                 name.append(Component.literal(" [" + BuiltInRegistries.ATTRIBUTE.getKey(attr) + "]").withStyle(style));
             }
 
@@ -213,7 +213,7 @@ public class AttributesGui implements Renderable, GuiEventListener {
                 list.add(txt);
             }
             else if (ApothicAttributes.getTooltipFlag().isAdvanced()) {
-                Component txt = Component.literal(key).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+                Component txt = Component.literal(key).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC);
                 list.add(txt);
             }
 
