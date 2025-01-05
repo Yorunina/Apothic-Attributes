@@ -5,12 +5,14 @@ import java.util.Random;
 import dev.shadowsoffire.apothic_attributes.ALConfig;
 import dev.shadowsoffire.apothic_attributes.ApothicAttributes;
 import dev.shadowsoffire.apothic_attributes.api.ALObjects;
+import dev.shadowsoffire.apothic_attributes.api.ALObjects.Attachments;
 import dev.shadowsoffire.apothic_attributes.api.AttributeHelper;
 import dev.shadowsoffire.apothic_attributes.commands.BonusModifierCommand;
 import dev.shadowsoffire.apothic_attributes.event.ApotheosisCommandEvent;
 import dev.shadowsoffire.apothic_attributes.payload.ConfigPayload;
 import dev.shadowsoffire.apothic_attributes.payload.CritParticlePayload;
 import dev.shadowsoffire.apothic_attributes.util.AttributesUtil;
+import dev.shadowsoffire.apothic_attributes.util.LEInvoker;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.particles.ParticleTypes;
@@ -99,20 +101,28 @@ public class AttributeEvents {
         }
     }
 
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void recordPreDamageHealth(LivingDamageEvent.Pre e) {
+        e.getEntity().setData(Attachments.PRE_DAMAGE_HEALTH, e.getEntity().getHealth());
+    }
+
     /**
      * This event handler manages the Life Steal and Overheal attributes.
      */
+    @SubscribeEvent
     public void lifeStealOverheal(LivingDamageEvent.Post e) {
         if (e.getSource().getDirectEntity() instanceof LivingEntity attacker && AttributesUtil.isPhysicalDamage(e.getSource())) {
+            float oldEntityHealth = e.getEntity().getData(Attachments.PRE_DAMAGE_HEALTH);
             float lifesteal = (float) attacker.getAttributeValue(ALObjects.Attributes.LIFE_STEAL);
-            float dmg = Math.min(e.getNewDamage(), e.getEntity().getHealth());
+            float dmg = Math.min(e.getNewDamage(), oldEntityHealth);
             if (lifesteal > 0.001) {
                 attacker.heal(dmg * lifesteal);
             }
             float overheal = (float) attacker.getAttributeValue(ALObjects.Attributes.OVERHEAL);
             float maxOverheal = attacker.getMaxHealth() * 0.5F;
             if (overheal > 0 && attacker.getAbsorptionAmount() < maxOverheal) {
-                attacker.setAbsorptionAmount(Math.min(maxOverheal, attacker.getAbsorptionAmount() + dmg * overheal));
+                // Overheal needs to bypass the max absorption attribute, which is used for natural absorption regeneration, but also clamps the total number of abs hearts.
+                ((LEInvoker) attacker).apoth_setInternalAbsorption(Math.min(maxOverheal, attacker.getAbsorptionAmount() + dmg * overheal));
             }
         }
     }

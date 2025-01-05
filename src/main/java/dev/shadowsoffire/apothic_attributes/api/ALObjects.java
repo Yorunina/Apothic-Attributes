@@ -31,8 +31,10 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.common.BooleanAttribute;
 import net.neoforged.neoforge.common.PercentageAttribute;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 public class ALObjects {
 
@@ -307,6 +309,19 @@ public class ALObjects {
         public static void bootstrap() {}
     }
 
+    public static class Attachments {
+
+        /**
+         * Records the amount of health an entity had during the {@link LivingDamageEvent.Pre} for use in {@link LivingDamageEvent.Post}.
+         * <p>
+         * This allows effects to be computed based on the actual amount of damage taken.
+         */
+        public static final AttachmentType<Float> PRE_DAMAGE_HEALTH = R.attachment("pre_damage_health", (holder) -> 0F, b -> b);
+
+        @ApiStatus.Internal
+        public static void bootstrap() {}
+    }
+
     public static class Tags {
 
         /**
@@ -326,6 +341,7 @@ public class ALObjects {
         DamageTypes.bootstrap();
         Potions.bootstrap();
         Components.bootstrap();
+        Attachments.bootstrap();
         bus.register(R);
     }
 }

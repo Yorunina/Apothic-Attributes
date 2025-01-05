@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import dev.shadowsoffire.apothic_attributes.api.ALCombatRules;
 import dev.shadowsoffire.apothic_attributes.api.ALObjects;
+import dev.shadowsoffire.apothic_attributes.util.LEInvoker;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -20,7 +21,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
 @Mixin(value = LivingEntity.class, remap = false)
-public abstract class LivingEntityMixin extends Entity {
+public abstract class LivingEntityMixin extends Entity implements LEInvoker {
 
     public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -70,6 +71,14 @@ public abstract class LivingEntityMixin extends Entity {
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/CombatRules;getDamageAfterMagicAbsorb(FF)F"), method = "getDamageAfterMagicAbsorb(Lnet/minecraft/world/damagesource/DamageSource;F)F", require = 1)
     public float apoth_applyProtPen(float amount, float protPoints, DamageSource src, float amt2) {
         return ALCombatRules.getDamageAfterProtection((LivingEntity) (Object) this, src, amount, protPoints);
+    }
+
+    @Shadow
+    protected abstract void internalSetAbsorptionAmount(float absorptionAmount);
+
+    @Override
+    public void apoth_setInternalAbsorption(float absorptionAmount) {
+        this.internalSetAbsorptionAmount(absorptionAmount);
     }
 
 }
