@@ -1,3 +1,13 @@
+## 2.6.0
+* Fixed Life Steal and Overheal not working as intended.
+  * Both of these attributes relied on knowing how much damage the entity had taken to it's health as the source of how much healing could be done.
+  * However, changed in Neo's damage pipeline meant this information was no longer available in the same way. I've stapled it to the entity so the calculations work again.
+  * On top of that, Overheal was getting negated entirely by the new Max Absorption attribute. Overheal will now bypass that control, but overheal hearts may be lost if the attribute updates.
+* Fixed a missing translation for the "Hide Unchanged" button in the Attributes GUI.
+* Made the advanced tooltip metadata in the Attributes GUI dark gray instead of gray.
+* Waffylka: Updated Russian translation.
+* A stock datapack artifact will now be published to CurseForge with each release of the mod.
+
 ## 2.5.0
 * Added the Projectile Damage attribute, which increases the damage of all projectiles owned by the entity.
 * Updated the isPhysicalDamage check to use `neoforge:is_magic` instead of raw damage type checks.
