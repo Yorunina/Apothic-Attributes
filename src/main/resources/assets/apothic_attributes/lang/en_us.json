@@ -51,6 +51,9 @@
     "neoforge.step_height.desc": "How many blocks you may step up without jumping.",
     "neoforge.swim_speed.desc": "How fast you swim, relative to normal.",
 
+    "button.apothic_attributes.hide_unchanged": "Hide Unchanged Attributes",
+    "text.apothic_attributes.hide_unchanged": "Hide Unchanged",
+
     "apothic_attributes:draw_speed": "Draw Speed",
     "apothic_attributes:draw_speed.desc": "How fast you draw ranged weapons, such as bows, crossbows, or tridents.",
 

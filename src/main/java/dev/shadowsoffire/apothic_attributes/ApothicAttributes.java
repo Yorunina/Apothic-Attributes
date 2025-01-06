@@ -18,6 +18,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput.Target;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -169,6 +171,21 @@ public class ApothicAttributes {
 
     public static ResourceLocation loc(String path) {
         return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    }
+
+    /**
+     * Constructs a mutable component with a lang key of the form "type.modid.path", using {@link ApothicAttributes#MODID}.
+     *
+     * @param type The type of language key, "misc", "info", "title", etc...
+     * @param path The path of the language key.
+     * @param args Translation arguments passed to the created translatable component.
+     */
+    public static MutableComponent lang(String type, String path, Object... args) {
+        return Component.translatable(langKey(type, path), args);
+    }
+
+    public static String langKey(String type, String path) {
+        return type + "." + MODID + "." + path;
     }
 
     private static class ClientAccess {

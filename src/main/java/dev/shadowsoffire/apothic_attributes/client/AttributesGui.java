@@ -181,7 +181,7 @@ public class AttributesGui implements Renderable, GuiEventListener {
         }
         this.renderTooltip(gfx, mouseX, mouseY);
         gfx.drawString(font, Component.translatable("apothic_attributes.gui.attributes"), this.leftPos + 8, this.topPos + 5, 0x404040, false);
-        gfx.drawString(font, Component.literal("Hide Unchanged"), this.leftPos + 20, this.topPos + 152, 0x404040, false);
+        gfx.drawString(font, ApothicAttributes.lang("text", "hide_unchanged"), this.leftPos + 20, this.topPos + 152, 0x404040, false);
     }
 
     @SuppressWarnings("deprecation")
@@ -541,7 +541,7 @@ public class AttributesGui implements Renderable, GuiEventListener {
     public class HideUnchangedButton extends AbstractButton {
 
         public HideUnchangedButton(int pX, int pY) {
-            super(pX, pY, 10, 10, Component.literal("Hide Unchanged Attributes"));
+            super(pX, pY, 10, 10, ApothicAttributes.lang("button", "hide_unchanged"));
             this.visible = false;
         }
 
