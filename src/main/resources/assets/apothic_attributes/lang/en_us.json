@@ -1,22 +1,4 @@
 {
-    "item.modifiers.both_hands": "When Held:",
-
-    "apothic_attributes.adv.base": "[Entity: %s | Item: %s]",
-    "apothic_attributes.adv.sharpness_bonus": "[Sharp: +%s]",
-
-    "apothic_attributes.value.flat": "%s",
-    "apothic_attributes.value.percent": "%s%%",
-
-    "apothic_attributes.value.boolean.enabled": "Enabled",
-    "apothic_attributes.value.boolean.disabled": "Disabled",
-    "apothic_attributes.value.boolean.enable": "Enables",
-    "apothic_attributes.value.boolean.force_disable": "Forcibly Disables",
-    "apothic_attributes.value.boolean.invalid": "Invalid",
-
-    "apothic_attributes.modifier.plus": "+%s %s",
-    "apothic_attributes.modifier.take": "-%s %s",
-    "apothic_attributes.modifier.bool": "%s %s",
-
     "apothic_attributes.gui.attributes": "Attributes",
     "apothic_attributes.gui.base": "Base: %s",
     "apothic_attributes.gui.min": "Min: %s",
