@@ -1,3 +1,8 @@
+## 2.6.1
+* Added a fix for MC-268917. This changes the sneak drop-down height to be capped at 0.6 (the default step height) instead of using the player's current step height.
+  * Without this change, players with a high step height value may find themselves falling off blocks while sneaking.
+  * This behavior is very unintuitive, but Mojang has marked this bug as "Working as Intended", so they won't fix it.
+
 ## 2.6.0
 * Fixed Life Steal and Overheal not working as intended.
   * Both of these attributes relied on knowing how much damage the entity had taken to it's health as the source of how much healing could be done.
