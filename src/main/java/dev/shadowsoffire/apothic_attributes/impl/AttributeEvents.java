@@ -387,7 +387,7 @@ public class AttributeEvents {
     @SubscribeEvent
     public void cmds(RegisterCommandsEvent e) {
         var builder = Commands.literal("apoth");
-        NeoForge.EVENT_BUS.post(new ApotheosisCommandEvent(builder));
+        NeoForge.EVENT_BUS.post(new ApotheosisCommandEvent(builder, e.getBuildContext()));
         e.getDispatcher().register(builder);
     }
 
