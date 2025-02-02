@@ -81,7 +81,7 @@ public class ALCombatRules {
     public static float getDamageAfterArmor(LivingEntity target, DamageSource src, float amount, float armor, float toughness) {
         if (src.getEntity() instanceof LivingEntity attacker) {
             float shred = (float) attacker.getAttributeValue(Attributes.ARMOR_SHRED);
-            float bypassResist = Math.min(toughness * 0.02F, 0.6F);
+            float bypassResist = getBypassResistance(amount, armor, toughness);
             if (shred > 0.001F) {
                 shred *= 1 - bypassResist;
                 armor *= 1 - shred;
@@ -150,5 +150,22 @@ public class ALCombatRules {
                 .eval().floatValue();
         }
         return a / (a + armor);
+    }
+
+    /**
+     * Computes the amount of armor bypass that the target's toughness value will resist.
+     * <p>
+     * A returned value of 1.0 will nullify enemy armor bypass.
+     */
+    public static float getBypassResistance(float damage, float armor, float toughness) {
+        if (ALConfig.getToughnessExpr().isPresent()) {
+            float bypassResist = ALConfig.getToughnessExpr().get()
+                .setVariable("damage", new BigDecimal(damage))
+                .setVariable("armor", new BigDecimal(armor))
+                .setVariable("toughness", new BigDecimal(toughness))
+                .eval().floatValue();
+            return Math.clamp(bypassResist, 0, 1);
+        }
+        return Math.min(toughness * 0.02F, 0.6F);
     }
 }

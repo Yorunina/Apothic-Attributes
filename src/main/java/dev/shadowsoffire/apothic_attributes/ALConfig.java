@@ -24,6 +24,7 @@ public class ALConfig {
     private static Optional<Expression> protExpr;
     private static Optional<Expression> aValueExpr;
     private static Optional<Expression> armorExpr;
+    private static Optional<Expression> toughnessExpr;
 
     public static void load() {
         Configuration cfg = new Configuration(ApothicAttributes.getConfigFile(ApothicAttributes.MODID));
@@ -85,6 +86,21 @@ public class ALConfig {
                 """,
             "a", "damage", "armor", "toughness");
 
+        toughnessExpr = readConfigExpression(cfg, "Armor Toughness Formula", "combat_rules", "min(toughness * 0.02, 0.6)",
+            """
+                The armor toughness formula.
+                This is used to determine how armor toughness impacts enemy Armor Pierce / Armor Shred.
+                Arguments:
+                    'damage' - The damage of the incoming attack.
+                    'armor' - The armor value of the user after reductions.
+                    'toughness' - The armor toughness value of the user.
+                Output:
+                    The percentage by which enemy armor pierce/shred will be reduced, from 0 (no change) to 1 (preventing it completely).
+                Reference:
+                    See https://github.com/ezylang/EvalEx#usage-examples for how to write expressions.
+                """,
+            "damage", "armor", "toughness");
+
         if (cfg.hasChanged()) cfg.save();
     }
 
@@ -98,6 +114,10 @@ public class ALConfig {
 
     public static Optional<Expression> getArmorExpr() {
         return armorExpr;
+    }
+
+    public static Optional<Expression> getToughnessExpr() {
+        return toughnessExpr;
     }
 
     public static ResourceManagerReloadListener makeReloader() {
