@@ -1,3 +1,8 @@
+## 2.6.2
+* RuyaSavascisi: Added Turkish translation.
+* okazako: Added Japanese translation.
+* Made the armor bypass resistance formula (controlled by armor toughness) configurable instead of the fixed 2% per point of toughness.
+
 ## 2.6.1
 * Added a fix for MC-268917. This changes the sneak drop-down height to be capped at 0.6 (the default step height) instead of using the player's current step height.
   * Without this change, players with a high step height value may find themselves falling off blocks while sneaking.
