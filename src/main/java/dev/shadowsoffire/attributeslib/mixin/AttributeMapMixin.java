@@ -75,7 +75,9 @@ public class AttributeMapMixin implements IEntityOwned, IAttributeManager {
      */
     @Inject(at = @At(value = "HEAD"), method = "onAttributeModified(Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;)V", require = 1)
     public void apoth_attrModifiedEvent(AttributeInstance inst, CallbackInfo ci) {
-        if (owner == null) throw new RuntimeException("An AttributeMap object was modified without a set owner!");
+        if (owner == null) {
+            return;
+        }
 
         if (!this.areAttributesUpdating() && !owner.level().isClientSide) {
             // This call site is only valid on the server, because the client nukes and reapplies all attribute modifiers when received.

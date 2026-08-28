@@ -37,7 +37,7 @@ public class ALObjects {
         /**
          * Percentage armor reduction. Base value = (0.0) = 0% of armor reduced during damage calculations.
          */
-        public static final RegistryObject<Attribute> ARMOR_SHRED = R.attribute("armor_shred", () -> new PercentBasedAttribute("attributeslib:armor_shred", 0.0D, 0.0D, 2.0D).setSyncable(true));
+        public static final RegistryObject<Attribute> ARMOR_SHRED = R.attribute("armor_shred", () -> new PercentBasedAttribute("attributeslib:armor_shred", 0.0D, 0.0D, 10.0D).setSyncable(true));
 
         /**
          * Arrow Damage. Base value = (1.0) = 100% default arrow damage

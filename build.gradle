@@ -2,11 +2,8 @@ plugins {
     id 'idea'
     id 'eclipse'
     id 'maven-publish'
-    id 'net.neoforged.gradle' version '[6.0.18, 6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'com.diffplug.eclipse.apt' version '3.42.2'
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
     id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
-    id 'net.darkhax.curseforgegradle' version '1.1.15'
 }
 
 base {
@@ -16,7 +13,7 @@ base {
 java.toolchain.languageVersion = JavaLanguageVersion.of(project.properties.javaVersion)
 
 minecraft {
-    mappings channel: 'parchment', version: project.properties.parchmentVersion
+    mappings channel: mapping_channel, version: mapping_version
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     enableEclipsePrepareRuns = true
     copyIdeResources = true
@@ -51,8 +48,8 @@ sourceSets.main.resources {
 
 repositories {
     maven {
-        // CurseForge
-        url "https://www.cursemaven.com"
+        name = "Curse maven"
+        url = "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
@@ -65,24 +62,6 @@ repositories {
         }
     }
     maven {
-        // The One Probe
-        url "https://maven.k-4u.nl"
-        content {
-            includeGroup "mcjty.theoneprobe"
-        }
-    }
-    maven {
-        // Patchouli
-        url "https://maven.blamejared.com"
-        content {
-            includeGroup "vazkii.patchouli"
-            includeGroupByRegex "net\\.darkhax.*"
-            includeGroupByRegex "com\\.blamejared.*"
-            includeGroup "org.openzen.zencode"
-            includeGroup "mezz.jei"
-        }
-    }
-    maven {
         // Shadows
         url "https://maven.shadowsoffire.dev/releases"
         content {
@@ -92,24 +71,10 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.neoforged:forge:${mcVersion}-${forgeVersion}"
-    if(project.mixin.toBoolean())                   annotationProcessor "org.spongepowered:mixin:${mixinVersion}:processor"
-    if(project.hasProperty('placeboVersion'))       implementation fg.deobf("dev.shadowsoffire:Placebo:${mcVersion}-${placeboVersion}")
-    if(project.hasProperty('jeiVersion'))           implementation fg.deobf("mezz.jei:jei-${mcVersion}-forge:${jeiVersion}")
-    if(project.hasProperty('jadeFileId'))           implementation fg.deobf("curse.maven:jade-324717:${jadeFileId}")
-    if(project.hasProperty('curiosVersion'))        implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curiosVersion}")
-    if(project.hasProperty('patchouliVersion'))     implementation fg.deobf("vazkii.patchouli:Patchouli:${patchouliVersion}")
-    if(project.hasProperty('topVersion'))           implementation fg.deobf(project.dependencies.create("mcjty.theoneprobe:theoneprobe:${topVersion}") {
-            transitive = false
-    })
-    if(project.hasProperty('bookshelfVersion'))     compileOnly    fg.deobf("net.darkhax.bookshelf:Bookshelf-Forge-${mcVersion}:${bookshelfVersion}")
-    if(project.hasProperty('gamestagesVersion'))    compileOnly    fg.deobf("net.darkhax.gamestages:GameStages-Forge-${mcVersion}:${gamestagesVersion}")
-    if(project.hasProperty('twilightFileId'))       implementation fg.deobf("curse.maven:the-twilight-forest-227639:${twilightFileId}")
-    if(project.hasProperty('gatewaysVersion'))      implementation fg.deobf("dev.shadowsoffire:GatewaysToEternity:${mcVersion}-${gatewaysVersion}")
-    if(project.hasProperty('attributeslibVersion')) implementation fg.deobf("dev.shadowsoffire:ApothicAttributes:${mcVersion}-${attributeslibVersion}")
-
-    implementation fg.deobf("curse.maven:mmmmmmmmmmmm-225738:4602101")
-    implementation fg.deobf("curse.maven:selene-499980:4656567")
+    minecraft "net.minecraftforge:forge:${mcVersion}-${forgeVersion}"
+    annotationProcessor "org.spongepowered:mixin:${mixinVersion}:processor"
+    implementation fg.deobf("dev.shadowsoffire:Placebo:${mcVersion}-${placeboVersion}")
+    implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curiosVersion}")
 }
 
 mixin {
@@ -245,31 +210,6 @@ java {
     // withJavadocJar()
 }
 
-publishing {
-    repositories {
-        maven {
-            name = "shadowsMaven"
-            url = "https://maven.shadowsoffire.dev/releases"
-            credentials(PasswordCredentials)
-            authentication {
-                basic(BasicAuthentication)
-            }
-        }
-    }
-    publications {
-        mavenJava(MavenPublication) {
-            groupId = "${modGroup}"
-            artifactId = "${fileName}"
-            version = "${mcVersion}-${version}"
-            pom.withXml {
-                def node = asNode()
-                if(node.dependencies.size() > 0)
-                    node.remove(node.dependencies) // Remove deps, as they are all mappings-dependent and/or forge
-            }
-            from components.java
-        }
-    }
-}
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
@@ -277,64 +217,4 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.withType(GenerateModuleMetadata) {
     enabled = false // Can't figure out how to disable the dependencies block here, and it's wrong by default (it pulls deobf deps).
-}
-
-def getChangelogLink() {
-    def repo = ''
-    def proc = 'git config --get remote.origin.url'.execute();
-    proc.in.eachLine { line -> repo = line}
-    proc.err.eachLine { line -> println line }
-    proc.waitFor();
-
-    def branch = ''
-    proc = 'git rev-parse --abbrev-ref HEAD'.execute()
-    proc.in.eachLine { line -> branch = line }
-    proc.err.eachLine { line -> println line }
-    proc.waitFor()
-    // Remove ".git" and append /blob/branch/changelog.md
-    if (!repo.isBlank() && !branch.isBlank()) {
-        return repo.substring(0, repo.length() - 4) + '/blob/' + branch + '/changelog.md'
-    }
-    else {
-        return ''
-    }
-}
-
-// Splits a list of values separated by ', ' (comma + space).
-def splitList(list) {
-    def split = list.split(', ')
-    assert split.length == list.count(',') + 1
-    return split
-}
-
-tasks.register('publishCurseForge', net.darkhax.curseforgegradle.TaskPublishCurseForge).configure {
-    if (project.hasProperty('curseforgeUploadToken')) {
-        apiToken = getProperty('curseforgeUploadToken')
-        disableVersionDetection()
-    
-        def projectId = getProperty('curseforgeProjectId')
-        def mainFile = upload(projectId, jar)
-        mainFile.changelog = getChangelogLink()
-        mainFile.addModLoader(splitList("${modLoaders}"))
-        mainFile.addJavaVersion("Java ${javaVersion}")
-        mainFile.addGameVersion("${mcVersion}")
-        mainFile.releaseType = "${releaseType}"
-    
-        if (project.hasProperty('requiredDeps')) {
-            mainFile.addRequirement(splitList("${requiredDeps}"))
-        }
-        if (project.hasProperty('optionalDeps')) {
-            mainFile.addOptional(splitList("${optionalDeps}"))
-        }
-        if (project.hasProperty('incompatibleDeps')) {
-            mainFile.addIncompatibility(splitList("${incompatibleDeps}"))
-        }
-    
-        mainFile.withAdditionalFile(sourcesJar)
-    }
-}
-
-task publishAll() {
-    dependsOn publish
-    dependsOn publishCurseForge
 }

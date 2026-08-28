@@ -91,7 +91,9 @@ public class ALCombatRules {
             }
         }
 
-        if (armor <= 0) return amount;
+        if (armor <= 0) {
+            return amount + (0.02F * -armor * amount);
+        }
         return amount * getArmorDamageReduction(amount, armor, toughness);
     }
 
