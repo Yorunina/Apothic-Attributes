@@ -71,6 +71,7 @@ public class AttributesLibClient {
         // Teleporting to another dimension constitutes a respawn - the other checks we have ensure the mayFly state returns, but not the flying state.
         // For this one we have to ensure that the state is marked to be restored before MultiPlayerGameMode#adjustPlayer is called in
         // ClientPacketListener#handleRespawn.
+        e.getNewPlayer().getAbilities().setFlyingSpeed(e.getOldPlayer().getAbilities().getFlyingSpeed());
         if (e.getOldPlayer().getAbilities().flying) {
             ((IFlying) e.getNewPlayer()).markFlying();
         }

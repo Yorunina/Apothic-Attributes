@@ -55,7 +55,9 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
+import net.minecraftforge.event.entity.player.PlayerEvent.Clone;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -66,6 +68,39 @@ public class AttributeEvents {
     public void fixChangedAttributes(PlayerLoggedInEvent e) {
         AttributeMap map = e.getEntity().getAttributes();
         map.getInstance(ForgeMod.STEP_HEIGHT_ADDITION.get()).setBaseValue(0.6);
+    }
+
+    /**
+     * The server creates a new player instance when a player respawns. Preserve the old flying state
+     * until the new instance has finished being restored and its abilities can be synchronized.
+     */
+    @SubscribeEvent
+    public void cacheFlyingOnClone(Clone e) {
+        if (e.getEntity() instanceof ServerPlayer player) {
+            player.getAbilities().setFlyingSpeed(e.getOriginal().getAbilities().getFlyingSpeed());
+            if (e.isWasDeath() && e.getOriginal().getAbilities().flying) {
+                ((IFlying) player).markFlying();
+            }
+        }
+    }
+
+    /**
+     * Re-apply attribute-provided creative flight after the server-side player instance is replaced.
+     * Attribute values may not change during respawn, so the normal value-change callback is not
+     * guaranteed to run for the new abilities object.
+     */
+    @SubscribeEvent
+    public void restoreCreativeFlightOnRespawn(PlayerRespawnEvent e) {
+        if (e.getEntity() instanceof ServerPlayer player) {
+            boolean hasCreativeFlight = player.getAttributeValue(ALObjects.Attributes.CREATIVE_FLIGHT.get()) > 0;
+            boolean wasFlying = ((IFlying) player).getAndDestroyFlyingCache();
+
+            if (hasCreativeFlight) {
+                player.getAbilities().mayfly = true;
+                player.getAbilities().flying |= wasFlying;
+                player.onUpdateAbilities();
+            }
+        }
     }
 
     private boolean canBenefitFromDrawSpeed(ItemStack stack) {
